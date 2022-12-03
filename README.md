@@ -1,16 +1,23 @@
 # Inisights Net - Wiki
 
 ## Installation
-```python 
-pip install Wikipedia
+Install manually by cloning and then running
+
+``` 
 pip install -e wikipedia_tools
+```
+
+or by running
+
+``` 
+pip install -e git+https://github.com/DLR-SC/wikipedia-periodic-revisions.git
 ```
 
 ## wikipedia_tools package
 
 This packages is responsible for:
 - fetching the wikipages revisions based on a period of time
-- load them into proper formats, and
+- load them into parquet, and
 - provide basic analysis
 
 It contains three main subpackages and the *utils* package which contains few helpers functions:
@@ -41,26 +48,5 @@ wikirevs= downloader.WikiPagesRevision(
                                         save_each_page= True
                                         )
 ```
-
-
-### Processor [[wikipedia_tools.processor ](wikipedia_tools/wikipedia_tools/processor )]
-
-###### [[wikipedia_tools.processor.loader ](wikipedia_tools/wikipedia_tools/processor/loader.py )]
-- Overview: this is used to load the Wikipedia Climate Change jsonl (corpus) file and save each wiki page as a jsonl. Each line in the main jsonl contains all the revisions of 1 wiki pages except pages with id 189, 1537 and 1589 (check file [multi_pages.txt](data/docs/multi_pages.txt) or see notes below)
-- The 'run' method process X number of wiki pages from the corpus and saves each as jsonl file per wiki page. (These files are already uploaded to 'V:\InsightsNet\Corpora\Wikipedia\wiki_pages\wiki_pages_edits')
-- **get_wiki_page(wiki_page_title)**: loads 1 wiki page into pandas dataframe where each row represents a revision
-- **get_wiki_titles()**: returns a list of the wikipedia titles in the corpus - All the wiki titles are saved here: [wiki_titles.txt](data/docs/wiki_titles.txt)
-
-###### [[wikipedia_tools.processor.processor ](wikipedia_tools/wikipedia_tools/processor/processor.py )]
-- **get_wiki_pages_overview()**: loops over all the wikipedia pages in the corpus and gets general overview for each wiki page. In case the data is already processed, it loads it from [wiki_pages_overview.csv](data/docs/wiki_pages_overview.csv).
-    - The returned dataframe has the following columns: created on, initial content, last updated, latest content, edits number (total), content edits number, unique users, unique users who changed the content, is popular and importance. 
-    - the popularity and importance are defined based on the Wikipedia Project Climate Change popular pages (saved here: [wikipedia_wikiproject_climate_change_popular_pages.csv](data/docs/wikipedia_wikiproject_climate_change_popular_pages.csv))
-
-
-### Analyzer [[wikipedia_tools.analyzer ](wikipedia_tools/wikipedia_tools/analyzer )]
-Conducts feature extraction and analysis on the wikipedia pages revisions.
-
-### [Notebooks](wikipedia_tools/wikipedia_tools/notebooks)
-The notebooks demonstrates the usage of these packages
 
 
