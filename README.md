@@ -10,7 +10,7 @@ pip install -e wikipedia_tools
 or by running
 
 ``` 
-pip install -e git+https://github.com/DLR-SC/wikipedia-periodic-revisions.git
+pip install git+https://github.com/DLR-SC/wikipedia-periodic-revisions.git
 ```
 
 ## wikipedia_tools package
