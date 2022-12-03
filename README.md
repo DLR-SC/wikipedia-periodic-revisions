@@ -1,4 +1,4 @@
-# Inisights Net - Wiki
+# Wikipedia Periodic Revisions
 
 ## Installation
 Install manually by cloning and then running
