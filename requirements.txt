@@ -1,0 +1,11 @@
+git+https://readonlytoken:FJ8a8jzPMtQ_jZQ9HFR1@gitlab.dlr.de/insightsnet/inisightsnet_code.git@main#subdirectory=insightsnet_wiki/wikipedia_w_time
+nltk==3.4.5
+matplotlib>=3.2.1
+pymediawiki==0.7.2
+pandas>=1.0.1
+seaborn==0.11.2
+tqdm==4.43.0
+dataclasses>=0.6
+IPy==1.01
+textmining_utility==0.2.0
+
