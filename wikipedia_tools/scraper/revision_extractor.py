@@ -38,8 +38,7 @@ def process_page_revisions(page_name, lang, rev_from: datetime = None, rev_to: d
         if data is not None:
             res = [{**{'page': page_name, 'lang': lang, 'timestamp': item[0]}, **dict(item[1])}
                    for item in reversed(data.items())]
-        else:
-            print(f"No revisions were found for {page_name} for the chose period of time")
+        
     except Exception as other_exc:
         error = True
         print(

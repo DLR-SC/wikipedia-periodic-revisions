@@ -16,7 +16,7 @@ WIKI_MULTI_PAGES = os.path.join(  ROOT_PATH , "data", "docs", "multi_pages.txt")
 WIKI_OVERVIEW_CSV = os.path.join( OUT ,  "wiki_pages_overview.csv")
 WIKI_EDITS_COUNT_CSV= os.path.join( OUT ,  "wiki_pages_edit_number_{}_{}.csv")
 WIKI_EDITS_PERIODIC_CSV= os.path.join( OUT ,  "wiki_pages_edit_{}_{}.csv")
-FOLDER_WIKI_BATCHES= os.path.join( "{}", "data" ,  "{}_wiki_batches")
+FOLDER_WIKI_BATCHES= os.path.join(  "data" ,  "processed_{}_wiki_batches")
 
 WIKI_SCRAPER_DEBUG_FOLDER= os.path.join( ROOT_PATH, "data" ,  "debug")
 

@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 import pandas as pd
@@ -125,10 +126,10 @@ def get_revision_count(only_popular=False, date_granularity=properties.DATE_MONT
 
 #
 
-def batch_wiki_edits_per_period(period=properties.DATE_MONTHLY, desc='monthly', category="Climate_change"):
+def batch_revisions_per_period(period=properties.DATE_MONTHLY, desc='monthly', category="Climate_change", corpus=None):
     folder_root = properties.FOLDER_WIKI_BATCHES.format(desc)
-
-    wiki_titles = loader.get_wikipedia_page_titles(categories=[category], corpus=properties.CORPUS)
+    corpus=properties.CORPUS if  corpus  is None else corpus
+    wiki_titles = loader.get_wikipedia_page_titles(categories=[category], corpus=corpus)
 
     print('there are {} wiki titles'.format(len(wiki_titles)))
 
@@ -145,7 +146,9 @@ def batch_wiki_edits_per_period(period=properties.DATE_MONTHLY, desc='monthly', 
             destination = f"{folder_root}/{period_val}/{title_code}.parquet"
             utils.create_folder(f"{folder_root}/{period_val}")
             period_df.to_parquet(destination, index=False)
-
+    periods = sorted([datetime.strptime(x, period) for x in  _df['abstracted_date'].unique()])
+    periods_str_lst = [x.strftime(period) for x in  periods]
+    return folder_root,periods_str_lst
 
 # get_wiki_edits_per_period
 def get_wikipedia_page_periodic_overview(only_popular=False, period=properties.DATE_YEAR, desc='YEAR', category="Climate_change"):
