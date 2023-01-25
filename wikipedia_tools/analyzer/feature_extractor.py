@@ -3,7 +3,7 @@ import pandas as pd
 import wikipedia_tools.processor.loader as loader
 import wikipedia_tools.utils.properties as prop
 import wikipedia_tools.utils.utils as utils
-import textmining_utility.lexicons as lexicons
+import nlpaf.lexicons as lexicons
 
 
 ## HELPERS

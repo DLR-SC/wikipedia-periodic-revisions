@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='wikipedia_tools',
-    version='1.0.1',
+    version='1.0.2',
     description='wikipedia_tools',
     #url='',
     author='Roxanne El Baff',
@@ -18,7 +18,7 @@ setup(
                       'pymediawiki==0.7.2',
                       'IPy>=1.01',
                       'seaborn>=0.11.2',
-                      'textmining_utility>=0.2.0',
+                      'nlpaf',
                       'tqdm==4.43.0',
                       'dataclasses==0.6',
                       'wikipedia_w_time @git+https://readonlytoken:FJ8a8jzPMtQ_jZQ9HFR1@gitlab.dlr.de/insightsnet/inisightsnet_code.git@main#subdirectory=insightsnet_wiki/wikipedia_w_time'
