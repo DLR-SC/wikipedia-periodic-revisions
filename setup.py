@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='wikipedia_tools',
-    version='0.18.0',
+    version='1.0.0',
     description='wikipedia_tools',
     #url='',
     author='Roxanne El Baff',
