@@ -132,7 +132,7 @@ def batch_revisions_per_period(period=properties.DATE_MONTHLY, desc='monthly', c
     wiki_titles = loader.get_wikipedia_page_titles(categories=[category], corpus=corpus)
 
     print('there are {} wiki titles'.format(len(wiki_titles)))
-
+    periords_str_lst = []
     for title_code in tqdm(wiki_titles[category]):
         original_df = loader.get_wikipedia_page_data(title_code)
         if (original_df is None) or len(original_df) == 0:
@@ -142,12 +142,14 @@ def batch_revisions_per_period(period=properties.DATE_MONTHLY, desc='monthly', c
         _df['timestamp_str'] = _df['timestamp']
         _df['timestamp'] = pd.to_datetime(_df['timestamp'], infer_datetime_format=True)
         _df['abstracted_date'] = _df['timestamp'].dt.strftime(period)
+        periords_str_lst.extend(_df['abstracted_date'].unique().tolist())
         for period_val, period_df in _df.groupby('abstracted_date'):
             destination = f"{folder_root}/{period_val}/{title_code}.parquet"
             utils.create_folder(f"{folder_root}/{period_val}")
             period_df.to_parquet(destination, index=False)
-    periods = sorted([datetime.strptime(x, period) for x in  _df['abstracted_date'].unique()])
-    periods_str_lst = [x.strftime(period) for x in  periods]
+    periods_str_lst = list(set(periords_str_lst))
+    periods_str_lst = sorted([datetime.strptime(x, period) for x in  periods_str_lst])
+
     return folder_root,periods_str_lst
 
 # get_wiki_edits_per_period
