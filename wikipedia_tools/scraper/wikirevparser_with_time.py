@@ -8,8 +8,8 @@ import re
 import string
 
 from collections import Counter, defaultdict, OrderedDict
-from wikipedia_w_time import wikipedia
-from wikipedia_w_time import exceptions
+from wikipedia_tools.base.wikipedia_w_time import wikipedia
+from wikipedia_tools.base.wikipedia_w_time import exceptions
 from datetime import datetime
 
 class ProcessRevisions:

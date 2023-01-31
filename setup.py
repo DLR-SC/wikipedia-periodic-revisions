@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='wikipedia_tools',
-    version='1.0.2',
+    version='1.1.0',
     description='wikipedia_tools',
     #url='',
     author='Roxanne El Baff',
@@ -12,7 +12,8 @@ setup(
               'wikipedia_tools.analyzer',
               'wikipedia_tools.processor',
               'wikipedia_tools.scraper',
-              'wikipedia_tools.utils'],
+              'wikipedia_tools.utils',
+              'wikipedia_tools.base'],
     install_requires=['pandas>=1.0.1',
                       'matplotlib>=3.2.1',
                       'pymediawiki==0.7.2',
@@ -21,7 +22,8 @@ setup(
                       'nlpaf',
                       'tqdm==4.43.0',
                       'dataclasses==0.6',
-                      'wikipedia_w_time @git+https://readonlytoken:FJ8a8jzPMtQ_jZQ9HFR1@gitlab.dlr.de/insightsnet/inisightsnet_code.git@main#subdirectory=insightsnet_wiki/wikipedia_w_time'
+                      'beautifulsoup4',
+                      'requests>=2.0.0,<3.0.0'
                       ],
     include_package_data=True,
     package_data={"../data": ["*"]},

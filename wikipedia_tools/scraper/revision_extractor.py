@@ -4,7 +4,7 @@ from datetime import datetime
 
 from wikipedia_tools.scraper.wikirevparser_with_time import ProcessRevisions
 
-from wikipedia_w_time.exceptions import DisambiguationError
+from wikipedia_tools.base.wikipedia_w_time.exceptions import DisambiguationError
 from functools import reduce
 from tqdm import tqdm
 
