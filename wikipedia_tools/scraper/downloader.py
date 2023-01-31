@@ -128,8 +128,7 @@ class WikiPagesRevision:
 
         file_name = os.path.join(
             root,
-            f"{self.output_file}_" \
-            f"{WikiPagesRevision.REVISIONS_FILE_POSTFIX}"
+            f"{self.output_file}_{WikiPagesRevision.REVISIONS_FILE_POSTFIX}"
         )
 
         utils.create_folder(root)

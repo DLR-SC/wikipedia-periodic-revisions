@@ -7,7 +7,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "wikipedia_tools"
-version = "2.0.0"
+version = "2.1.0"
 description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
 readme = "README.md"
 authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]
@@ -24,7 +24,7 @@ dependencies = ['pandas>=1.0.1',
                       'pymediawiki==0.7.2',
                       'IPy>=1.01',
                       'seaborn>=0.11.2',
-                      'nlpaf',
+                      'nlpaf>1.0.0',
                       'tqdm==4.43.0',
                       'dataclasses==0.6',
                       'beautifulsoup4',
