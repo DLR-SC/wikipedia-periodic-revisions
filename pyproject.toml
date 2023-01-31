@@ -1,0 +1,40 @@
+# pyproject.toml
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+
+[project]
+name = "wikipedia_tools"
+version = "2.0.0"
+description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
+readme = "README.md"
+authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    'Intended Audience :: Science/Research',
+]
+keywords=['wikipedia', 'wikipedia revisions', 'wikipedia stats']
+dependencies = ['pandas>=1.0.1',
+                      'matplotlib>=3.2.1',
+                      'pymediawiki==0.7.2',
+                      'IPy>=1.01',
+                      'seaborn>=0.11.2',
+                      'nlpaf',
+                      'tqdm==4.43.0',
+                      'dataclasses==0.6',
+                      'beautifulsoup4',
+                      'requests>=2.0.0,<3.0.0'
+                      ]
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dev = [ "pip-tools"]
+
+[project.urls]
+Homepage = 'https://github.com/DLR-SC/wikipedia-periodic-revisions'
+
