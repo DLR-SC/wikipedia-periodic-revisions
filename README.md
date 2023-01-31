@@ -18,7 +18,7 @@
 </p>
 
 
-> `wikipedia_tools` is a Python Package to download wikipedia revisions for pages belonging to certain *categories*, based on a period of time. Thi packages also provides overview stats for the downloaded data.
+> `wikipedia_tools` is a Python Package to download wikipedia revisions for pages belonging to certain *categories*, based on a period of time. This package also provides overview stats for the downloaded data.
 
 ---
 
