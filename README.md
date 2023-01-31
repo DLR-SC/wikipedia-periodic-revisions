@@ -1,8 +1,8 @@
 # Wikipedia Periodic Revisions
 
 ## Installation
-This package is built on top of the [Wikipedia API](https://github.com/goldsmith/Wikipedia). This code was forked under the $base$ subpackage.
-Also we fork the code from [ajoer/WikiRevParser](https://github.com/ajoer/WikiRevParser) and we modify it to support *from* and *to* datetime to fetch revisions between certain periods; the modified code is '''wikipedia_toools.scraper.wikirevparser_with_time.py'''.
+This package is built on top of the [Wikipedia API](https://github.com/goldsmith/Wikipedia). This code was forked under the `base` subpackage.
+Also we fork the code from [ajoer/WikiRevParser](https://github.com/ajoer/WikiRevParser) and we modify it to support *from* and *to* datetime to fetch revisions between certain periods; the modified code is `wikipedia_toools.scraper.wikirevparser_with_time.py`.
 
 ## Installation
 Install manually by cloning and then running
