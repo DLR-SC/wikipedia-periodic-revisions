@@ -15,7 +15,14 @@
   <a href="https://open.vscode.dev/DLR-SC/wikipedia_tools">
     <img alt="Badge: Open in VSCode" src="https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=open%20in%20visual%20studio%20code&labelColor=2c2c32&color=007acc&logoColor=007acc" target="_blank" />
   </a>
+  
+
+  <a href="https://github.com/psf/black">
+    <img alt="Badge: Open in VSCode" src="https://img.shields.io/badge/code%20style-black-000000.svg" target="_blank" />
+  </a>
 </p>
+
+
 
 
 > `wikipedia_tools` is a Python Package to download wikipedia revisions for pages belonging to certain *categories*, based on a period of time. This package also provides overview stats for the downloaded data.
