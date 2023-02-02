@@ -12,25 +12,28 @@ from wikipedia_tools.base.wikipedia_w_time import wikipedia
 from wikipedia_tools.base.wikipedia_w_time import exceptions
 from datetime import datetime
 
+
 class ProcessRevisions:
-
-    def __init__(self, language, event, rev_from: datetime=None, rev_to: datetime=None):
-
+    def __init__(
+        self, language, event, rev_from: datetime = None, rev_to: datetime = None
+    ):
         self.language = language
         self.event = event
         self.revisions = {}
         self.content = ""
         self.links = []
-        self.rev_from=rev_from
-        self.rev_to=rev_to
+        self.rev_from = rev_from
+        self.rev_to = rev_to
 
     def wikipedia_page(self):
         # Get Wikipedia revision history
         wikipedia.set_lang(self.language)
 
         try:
-            event_pagetitle = '_'.join(self.event.split())
-            page = wikipedia.WikipediaPage(event_pagetitle, rev_from=self.rev_from, rev_to=self.rev_to)
+            event_pagetitle = "_".join(self.event.split())
+            page = wikipedia.WikipediaPage(
+                event_pagetitle, rev_from=self.rev_from, rev_to=self.rev_to
+            )
             self.page = page
             self.revisions = page.revisions
             return page
@@ -56,16 +59,17 @@ class ProcessRevisions:
             return None
 
         if "|alt=" in line:
-
             elements = line.split("|alt=")[-1].split("|")[1:]
-            caption = '|'.join(elements)[:-2]
+            caption = "|".join(elements)[:-2]
             self.content = self.content.replace(line, caption)
 
         else:
             caption = re.search(r"thumb\|(.*)\]\]", line, re.IGNORECASE)
-            if not caption: return None
+            if not caption:
+                return None
             caption = caption.group(1)
-            if "px" in caption or caption.startswith("{{legend"): return None
+            if "px" in caption or caption.startswith("{{legend"):
+                return None
 
         # Links
         links, texts = self.get_links(caption)
@@ -97,7 +101,8 @@ class ProcessRevisions:
         else:
             return None
         # Filter out language links
-        if len(label) == 2 and label.islower(): return None
+        if len(label) == 2 and label.islower():
+            return None
 
         return category
 
@@ -106,9 +111,13 @@ class ProcessRevisions:
         if type(line) != str:
             return None
 
-        occurrence = re.search(r"(:|=)([^(:|=)].*)(.jpg|.svg|.png)", line, re.IGNORECASE)
+        occurrence = re.search(
+            r"(:|=)([^(:|=)].*)(.jpg|.svg|.png)", line, re.IGNORECASE
+        )
         if not occurrence:
-            occurrence = re.search(r"(^)([^(:|=)].*)(.jpg|.svg|.png)", line, re.IGNORECASE)
+            occurrence = re.search(
+                r"(^)([^(:|=)].*)(.jpg|.svg|.png)", line, re.IGNORECASE
+            )
         try:
             image_title, image_extension = occurrence.group(2, 3)
         except AttributeError:
@@ -116,8 +125,10 @@ class ProcessRevisions:
         if ":" in image_title:
             image_title = image_title.split(":")[-1]
 
-        image_title = '_'.join([x for x in image_title.split()])
-        image_link = "https://commons.wikimedia.org/wiki/File:" + image_title + image_extension
+        image_title = "_".join([x for x in image_title.split()])
+        image_link = (
+            "https://commons.wikimedia.org/wiki/File:" + image_title + image_extension
+        )
         return image_link
 
     def get_links(self, input_string):
@@ -126,7 +137,9 @@ class ProcessRevisions:
         if type(input_string) != str:
             return None, None
 
-        double_square_bracket, content = self.get_occurrences(r"\[\[(.*?)\]\]", input_string)
+        double_square_bracket, content = self.get_occurrences(
+            r"\[\[(.*?)\]\]", input_string
+        )
         links = []
         texts = []
 
@@ -152,7 +165,7 @@ class ProcessRevisions:
 
         exp = re.compile(regex, re.IGNORECASE)
         occurrences = exp.findall(content)
-        content = re.sub(exp, '', content)
+        content = re.sub(exp, "", content)
 
         return occurrences, content
 
@@ -168,8 +181,11 @@ class ProcessRevisions:
 
         for element in input_list:
             try:
-                reference_type = re.search("{{[c|C]ite (.*?)( |\|)", element, re.IGNORECASE).group(1)
-                if len(reference_type) <= 1: continue
+                reference_type = re.search(
+                    "{{[c|C]ite (.*?)( |\|)", element, re.IGNORECASE
+                ).group(1)
+                if len(reference_type) <= 1:
+                    continue
                 types[reference_type] += 1
 
             except AttributeError:
@@ -188,7 +204,8 @@ class ProcessRevisions:
                 url = url.group(1).split("|")[0]
             else:
                 url = re.search(http_regex, element, re.IGNORECASE)
-                if not url: continue
+                if not url:
+                    continue
                 url = url.group(1).split("|")[0]
             if "www" in url:
                 url = url[4:]
@@ -203,8 +220,8 @@ class ProcessRevisions:
 
         for line in self.content.split("\n"):
             for extension in extensions:
-
-                if not extension in line: continue
+                if not extension in line:
+                    continue
 
                 image_link = self.get_image_link(line)
                 images.append(image_link)
@@ -222,7 +239,6 @@ class ProcessRevisions:
         possible_links, texts = self.get_links(self.content)
 
         for link, text in zip(possible_links, texts):
-
             if ":" in link:
                 category = self.get_category(link)
                 if link.startswith("Category:"):
@@ -237,14 +253,19 @@ class ProcessRevisions:
 
     def parse_references(self):
         # Get and parse references and the top level domains.
-        reference_template_types = Counter()  # some references have "type" markup, e.g. "book", "thesis", "news" etc.
+        reference_template_types = (
+            Counter()
+        )  # some references have "type" markup, e.g. "book", "thesis", "news" etc.
 
         regex_letters = "\dA-Za-zğäåæáéëíıïóøöúü"
         regex_symbols = "\"'(){}[\]&=«»:.,?_~–\-/| "
 
-        references, self.content = self.get_occurrences(r"<ref(.*?)<\/ref>", self.content)
-        citations, self.content = self.get_occurrences(r"{{[c|C]ite [" + regex_letters + regex_symbols + ">]+}}",
-                                                       self.content)
+        references, self.content = self.get_occurrences(
+            r"<ref(.*?)<\/ref>", self.content
+        )
+        citations, self.content = self.get_occurrences(
+            r"{{[c|C]ite [" + regex_letters + regex_symbols + ">]+}}", self.content
+        )
 
         urls = self.get_urls(references + citations + [x for x in self.content.split()])
 
@@ -268,11 +289,11 @@ class ProcessRevisions:
         input_string = "".join([x for x in input_string if x != "'"])
 
         try:
-            nltk.data.find('tokenizers/punkt')
+            nltk.data.find("tokenizers/punkt")
         except LookupError:
-            nltk.download('punkt')
+            nltk.download("punkt")
 
-        output_string = ' '.join(nltk.word_tokenize(input_string))
+        output_string = " ".join(nltk.word_tokenize(input_string))
 
         return output_string
 
@@ -280,12 +301,30 @@ class ProcessRevisions:
         # Get and parse section titles.
         # Todo: improve section organization in output
         sections = []
-        header1s, self.content = self.get_occurrences(r"[^=]={2}([^=].*?)={2}", self.content)
-        header2s, self.content = self.get_occurrences(r"[^=]={3}([^=].*?)={3}", self.content)
-        header3s, self.content = self.get_occurrences(r"[^=]={4}([^=].*?)={4}", self.content)
-        sections.append([self.proper_formatting(x.strip(), punct=False) for x in header1s])
-        sections.append([self.proper_formatting(x.strip("=").strip(), punct=False) for x in header2s])
-        sections.append([self.proper_formatting(x.strip("==").strip(), punct=False) for x in header3s])
+        header1s, self.content = self.get_occurrences(
+            r"[^=]={2}([^=].*?)={2}", self.content
+        )
+        header2s, self.content = self.get_occurrences(
+            r"[^=]={3}([^=].*?)={3}", self.content
+        )
+        header3s, self.content = self.get_occurrences(
+            r"[^=]={4}([^=].*?)={4}", self.content
+        )
+        sections.append(
+            [self.proper_formatting(x.strip(), punct=False) for x in header1s]
+        )
+        sections.append(
+            [
+                self.proper_formatting(x.strip("=").strip(), punct=False)
+                for x in header2s
+            ]
+        )
+        sections.append(
+            [
+                self.proper_formatting(x.strip("==").strip(), punct=False)
+                for x in header3s
+            ]
+        )
 
         return sections
 
@@ -295,21 +334,23 @@ class ProcessRevisions:
         italics_markup, self.content = self.get_occurrences(r"\'{2,}", self.content)
 
         for line in self.content.split("\n"):
-
             line = line.strip()
-            if len(line) == 0: continue
-            if line[0] in string.punctuation or "px" in line: continue
+            if len(line) == 0:
+                continue
+            if line[0] in string.punctuation or "px" in line:
+                continue
 
             clean_content.append(self.proper_formatting(line))
 
-        self.content = ' '.join([w for w in clean_content])
+        self.content = " ".join([w for w in clean_content])
 
     def parse_revisions(self):
         # Input: revisions from Wikipedia page.
         # Output: dictionary with extracted page elements per revision.
         data = OrderedDict([])
 
-        if self.revisions == None: return None
+        if self.revisions == None:
+            return None
 
         for n, revision in enumerate(self.revisions):
             self.links = []
@@ -317,10 +358,12 @@ class ProcessRevisions:
             parsed_data = defaultdict()
             timestamp = revision["timestamp"]
 
-            if "user" not in revision.keys(): continue
+            if "user" not in revision.keys():
+                continue
             user = revision["user"]
 
-            if "*" not in revision["slots"]["main"].keys(): continue
+            if "*" not in revision["slots"]["main"].keys():
+                continue
             self.content = revision["slots"]["main"]["*"]
 
             urls, reference_template_types = self.parse_references()
