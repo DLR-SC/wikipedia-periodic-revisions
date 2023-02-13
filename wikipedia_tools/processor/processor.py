@@ -169,10 +169,14 @@ def batch_revisions_per_period(
     desc="monthly",
     category="Climate_change",
     corpus=None,
+    destination: str = ""
 ):
-    folder_root = properties.FOLDER_WIKI_BATCHES.format(desc)
+
+    folder_root = properties.FOLDER_WIKI_BATCHES.format(destination, desc)
+                    
     corpus = properties.CORPUS if corpus is None else corpus
-    wiki_titles = loader.get_wikipedia_page_titles(categories=[category], corpus=corpus)
+    wiki_titles = loader.get_wikipedia_page_titles(categories=[category],
+                                                   corpus=corpus)
 
     print("there are {} wiki titles".format(len(wiki_titles)))
     periords_str_lst = []
