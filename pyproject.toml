@@ -7,17 +7,11 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "wikipedia_tools"
-version = "2.1.2"
+version = "2.1.5"
 description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
 readme = "README.md"
 authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]
 license = { file = "LICENSE" }
-classifiers = [
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    'Intended Audience :: Science/Research',
-]
 keywords=['wikipedia', 'wikipedia revisions', 'wikipedia stats']
 dependencies = ['pandas>=1.0.1',
                       'matplotlib>=3.2.1',
@@ -32,9 +26,25 @@ dependencies = ['pandas>=1.0.1',
                       ]
 requires-python = ">=3.7"
 
+[tool.poetry]
+# ...
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+
+]
+readme = "README.md"
+include = ["data"]
+
+
 [project.optional-dependencies]
 dev = [ "pip-tools"]
 
 [project.urls]
 Homepage = 'https://github.com/DLR-SC/wikipedia-periodic-revisions'
+#[tool.setuptools.package-data]
+#myModule = ["../data/*.csv"]
 

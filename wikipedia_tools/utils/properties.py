@@ -11,11 +11,9 @@ OUT = os.path.join(ROOT_PATH, "data", "generated")
 
 STATS_FOLDER = os.path.join(ROOT_PATH, "data", "stats")
 
-WIKI_TITLES_PATH = os.path.join(ROOT_PATH, "data", "docs", "wiki_pages_titles.txt")
 WIKI_CLIMATE_CHANGE_POPULAR_PAGES = os.path.join(
-    ROOT_PATH, "data", "docs", "wikipedia_wikiproject_climate_change_popular_pages.csv"
+    "data", "wikipedia_wikiproject_climate_change_popular_pages.csv"
 )
-WIKI_MULTI_PAGES = os.path.join(ROOT_PATH, "data", "docs", "multi_pages.txt")
 
 WIKI_OVERVIEW_CSV = os.path.join(OUT, "wiki_pages_overview.csv")
 WIKI_EDITS_COUNT_CSV = os.path.join(OUT, "wiki_pages_edit_number_{}_{}.csv")

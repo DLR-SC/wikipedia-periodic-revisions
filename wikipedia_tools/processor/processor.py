@@ -1,12 +1,7 @@
 import datetime
-import logging
-
 import pandas as pd
-import os
-
 from glob import glob
 from tqdm import tqdm
-
 from wikipedia_tools.utils import properties, utils
 from wikipedia_tools.processor import loader
 from pathlib import Path
