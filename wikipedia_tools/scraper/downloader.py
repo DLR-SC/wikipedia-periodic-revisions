@@ -17,7 +17,7 @@ import random
 @dataclasses.dataclass
 class WikiPagesRevision:
     output_file: str = "all"
-    root_folder: str = "."#properties.ROOT_PATH
+    root_folder: str = "."  # properties.ROOT_PATH
     categories: List = dataclasses.field(
         default_factory=lambda: ["Climate_change"]
     )
