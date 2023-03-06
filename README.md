@@ -87,22 +87,39 @@ wikirevs= downloader.WikiPagesRevision(
                                         revisions_to=datetime.now(),
                                         save_each_page= True
                                         )
+
+count, destination_folder = wikirevs.download()
 ```
 
 
-For german wiki revisions, you can set the *lang* attrinute to *de* - For example, you can download the German Wikipedia page revisions for the Climate_change category, as follows:
+For german wiki revisions, you can set the *lang* attribute to *de* - For example, you can download the German Wikipedia page revisions for the Climate_change category, as follows:
 
 ```python
 from wikipedia_tools.scraper import downloader
 from datetime import datetime
 
 wikirevs= downloader.WikiPagesRevision( 
-                                        categories = ["Climate_change"],
-                                        revisions_from = utils.get_x_months_ago_date(1),
+                                        categories = ["Klimaveränderung"],
+                                        revisions_from = utils.get_x_months_ago_date(1), # beguinning of last month, you ca use datetime.now() + dateutil.relativedelta.relativedelta to customized past datetime relatively
                                         revisions_to=datetime.now(),
                                         save_each_page= True,
                                         lang="de"
                                         )
+count, destination_folder = wikirevs.download()
+
 ```
 
+You can then process each file by, for example, reading the parquet file using pandas:
 
+```python
+import pandas as pd
+from glob import glob
+files = f"{destination_folder}/*.parquet"
+
+# Loop over all wiki page revisions with this period and read each wiki page revs as a pandas dataframe
+for page_path in glob(files):
+    page_revs_df = pd.read_parquet(page_name)
+    # dataframe with columns ['page', 'lang', 'timestamp', 'categories', 'content', 'images', 'links', 'sections', 'urls', 'user']
+    # process/use file ....
+
+```

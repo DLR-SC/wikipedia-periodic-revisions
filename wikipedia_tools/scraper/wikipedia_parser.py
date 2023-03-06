@@ -66,7 +66,7 @@ def main():
             pages
             + reduce(
                 list.__add__,
-                [ce.get_category_pages(c) for c in args.categories],
+                [ce.get_category_pages(c, lang=args.language) for c in args.categories],
             )
         )
 

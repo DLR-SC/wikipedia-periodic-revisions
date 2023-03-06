@@ -40,6 +40,8 @@ def get_x_months_ago_date(decreased_month=0):
         second=0,
         microsecond=0,
     )
-    last_month = dateutil.relativedelta.relativedelta(months=-decreased_month)
+    last_month = last_month + dateutil.relativedelta.relativedelta(
+        months=-decreased_month
+    )
     print(last_month.strftime("%Y-%m-%dT%H:%M:%SZ"))
     return last_month

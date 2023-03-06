@@ -22,6 +22,7 @@ class ProcessRevisions:
         rev_to: datetime = None,
     ):
         self.language = language
+        wikipedia.set_lang(self.language)
         self.event = event
         self.revisions = {}
         self.content = ""

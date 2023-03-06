@@ -17,7 +17,7 @@ import random
 @dataclasses.dataclass
 class WikiPagesRevision:
     output_file: str = "all"
-    root_folder: str = properties.ROOT_PATH
+    root_folder: str = "."#properties.ROOT_PATH
     categories: List = dataclasses.field(
         default_factory=lambda: ["Climate_change"]
     )
@@ -51,7 +51,7 @@ class WikiPagesRevision:
             + reduce(
                 list.__add__,
                 [
-                    ce.get_category_pages(c, self.category_depth)
+                    ce.get_category_pages(c, self.lang, self.category_depth)
                     for c in self.categories
                 ],
             )
