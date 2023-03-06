@@ -5,9 +5,7 @@ Global wikipedia exception and warning classes.
 import sys
 
 
-ODD_ERROR_MESSAGE = (
-    "This shouldn't happen. Please report on GitHub: github.com/goldsmith/Wikipedia"
-)
+ODD_ERROR_MESSAGE = "This shouldn't happen. Please report on GitHub: github.com/goldsmith/Wikipedia"
 
 
 class WikipediaException(Exception):
@@ -67,7 +65,9 @@ class DisambiguationError(WikipediaException):
         self.options = may_refer_to
 
     def __unicode__(self):
-        return '"{0}" may refer to: \n{1}'.format(self.title, "\n".join(self.options))
+        return '"{0}" may refer to: \n{1}'.format(
+            self.title, "\n".join(self.options)
+        )
 
 
 class RedirectError(WikipediaException):

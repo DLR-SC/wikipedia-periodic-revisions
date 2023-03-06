@@ -16,7 +16,8 @@ def read_pages_file(pages_file):
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="Wikipedia Parser", description="Parser to extract Wikipedia discourse."
+        prog="Wikipedia Parser",
+        description="Parser to extract Wikipedia discourse.",
     )
 
     parser.add_argument(
@@ -63,7 +64,10 @@ def main():
     if args.categories:
         pages = set(
             pages
-            + reduce(list.__add__, [ce.get_category_pages(c) for c in args.categories])
+            + reduce(
+                list.__add__,
+                [ce.get_category_pages(c) for c in args.categories],
+            )
         )
 
     if len(pages) == 0:

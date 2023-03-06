@@ -32,9 +32,13 @@ RAW_LIWC_PATH = os.path.join(
 )
 
 FEATURE_NRC_PATH = os.path.join(OUT, "extracted_features", "nrc_{}.csv")
-FEATURE_MPQA_ARG_PATH = os.path.join(OUT, "extracted_features", "mpqa_arg_{}.csv")
+FEATURE_MPQA_ARG_PATH = os.path.join(
+    OUT, "extracted_features", "mpqa_arg_{}.csv"
+)
 FEATURE_EMPATH_PATH = os.path.join(OUT, "extracted_features", "empath_{}.csv")
-FEATURE_POLITENESS_PATH = os.path.join(OUT, "extracted_features", "politeness_{}.csv")
+FEATURE_POLITENESS_PATH = os.path.join(
+    OUT, "extracted_features", "politeness_{}.csv"
+)
 
 # CONSTANTS
 DATE_MONTHLY = "%m-%Y"

@@ -18,7 +18,9 @@ import random
 class WikiPagesRevision:
     output_file: str = "all"
     root_folder: str = properties.ROOT_PATH
-    categories: List = dataclasses.field(default_factory=lambda: ["Climate_change"])
+    categories: List = dataclasses.field(
+        default_factory=lambda: ["Climate_change"]
+    )
     revisions_from: datetime = None
     revisions_to: datetime = datetime.now()
     save_each_page: bool = False
@@ -27,7 +29,6 @@ class WikiPagesRevision:
     page_limit: int = -1
     lang: str = "en"
     REVISIONS_FILE_POSTFIX: ClassVar = "revisions.{}"
-    
 
     # categories_str:str = ""
     def __post_init__(self):
@@ -55,7 +56,9 @@ class WikiPagesRevision:
                 ],
             )
         )
-        print(f"Fetching pages for the following categories: {self.categories}")
+        print(
+            f"Fetching pages for the following categories: {self.categories}"
+        )
 
         if len(self.pages) == 0:
             raise Exception(
@@ -72,7 +75,9 @@ class WikiPagesRevision:
         if self.revisions_from is not None:
             self.period_str = f'{self.revisions_from.strftime("%d%b%Y")}'
             rev_to = (
-                self.revisions_to if self.revisions_to is not None else datetime.now()
+                self.revisions_to
+                if self.revisions_to is not None
+                else datetime.now()
             )
             self.period_str = f'{self.period_str}-{rev_to.strftime("%d%b%Y")}'
         print(self._get_filename("test"))
@@ -81,7 +86,9 @@ class WikiPagesRevision:
             p for p in self.pages if utils.file_exists(self._get_filename(p))
         ]
         self.pages = [
-            p for p in self.pages if not utils.file_exists(self._get_filename(p))
+            p
+            for p in self.pages
+            if not utils.file_exists(self._get_filename(p))
         ]
         print(
             f"There are {len(downloaded_pages)} downloaded pages and {len(self.pages)} pages to download"
@@ -143,9 +150,13 @@ class WikiPagesRevision:
                         # get file path for this page
                         file_path = self._get_filename(page_)
                         if self.out_version == "parquet":
-                            pd.DataFrame(group).to_parquet(file_path, index=False)
+                            pd.DataFrame(group).to_parquet(
+                                file_path, index=False
+                            )
                         else:
-                            with open(file_path, "w", encoding="utf-8") as file:
+                            with open(
+                                file_path, "w", encoding="utf-8"
+                            ) as file:
                                 file.write(json.dumps(group.to_json()))
 
         else:
@@ -169,7 +180,8 @@ class WikiPagesRevision:
         root = self._get_root_folder(page)
 
         file_name = os.path.join(
-            root, f"{self.output_file}_{WikiPagesRevision.REVISIONS_FILE_POSTFIX}"
+            root,
+            f"{self.output_file}_{WikiPagesRevision.REVISIONS_FILE_POSTFIX}",
         )
 
         utils.create_folder(root)
@@ -180,7 +192,9 @@ class WikiPagesRevision:
             self.output_file if page is None else utils.get_alphanumeric(page)
         )
 
-        root = properties.FOLDER_WIKI_BATCHES.format(self.root_folder, "periodic")
+        root = properties.FOLDER_WIKI_BATCHES.format(
+            self.root_folder, "periodic"
+        )
         root = (
             os.path.join(root, self.categories_str)
             if self.categories_str is not None

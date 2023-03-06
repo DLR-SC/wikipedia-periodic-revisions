@@ -12,5 +12,6 @@ def get_category_pages(category, depth=3):
         return pages
     else:
         return pages + reduce(
-            list.__add__, [get_category_pages(c, depth - 1) for c in subcategories]
+            list.__add__,
+            [get_category_pages(c, depth - 1) for c in subcategories],
         )

@@ -7,7 +7,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "wikipedia_tools"
-version = "2.1.7"
+version = "2.1.8"
 description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
 readme = "README.md"
 authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]
@@ -25,6 +25,7 @@ dependencies = ['pandas>=1.0.1',
                       'requests>=2.0.0,<3.0.0',
                       ]
 requires-python = ">=3.7"
+
 
 [tool.poetry]
 # ...
@@ -60,3 +61,5 @@ where = ["data"]
 [tool.setuptools.package-data]
 mypkg = ["*.csv"]
 
+[tool.black]
+line-length = 79

@@ -8,7 +8,9 @@ from pathlib import Path
 
 
 def get_wiki_popular_pages():
-    wiki_popular_page_df = pd.read_csv(properties.WIKI_CLIMATE_CHANGE_POPULAR_PAGES)
+    wiki_popular_page_df = pd.read_csv(
+        properties.WIKI_CLIMATE_CHANGE_POPULAR_PAGES
+    )
     return wiki_popular_page_df[wiki_popular_page_df["Page title"].notna()]
 
 
@@ -59,10 +61,14 @@ def get_wiki_pages_overview(category="Climate_change"):
         wiki_page_meta = {}
 
         _df["timestamp_str"] = _df["timestamp"]
-        _df["timestamp"] = pd.to_datetime(_df["timestamp"], infer_datetime_format=True)
+        _df["timestamp"] = pd.to_datetime(
+            _df["timestamp"], infer_datetime_format=True
+        )
         _df = _df.sort_values(by="timestamp")
 
-        init_content_df = _df[(~_df["content"].isna()) & (_df["content"] != "")].copy()
+        init_content_df = _df[
+            (~_df["content"].isna()) & (_df["content"] != "")
+        ].copy()
         init_content_df = init_content_df[
             init_content_df["timestamp"] == init_content_df["timestamp"].min()
         ]
@@ -86,11 +92,15 @@ def get_wiki_pages_overview(category="Climate_change"):
         wiki_page_meta["latest_content"] = last_updated_df["content"].values[0]
         wiki_page_meta["edits_number"] = len(original_df["timestamp"].unique())
         wiki_page_meta["content_edits_number"] = len(
-            _df.drop_duplicates(subset=["content"], keep="first", ignore_index=True)
+            _df.drop_duplicates(
+                subset=["content"], keep="first", ignore_index=True
+            )
         )
         wiki_page_meta["unique_users"] = len(original_df["user"].unique())
 
-        wiki_page_meta["is_popular"] = is_popular(init_content_df["page"].values[0])
+        wiki_page_meta["is_popular"] = is_popular(
+            init_content_df["page"].values[0]
+        )
         wiki_page_meta["importance"] = (
             popular_pages_df[popular_pages_df["Page title"] == title_code][
                 "Importance"
@@ -141,7 +151,9 @@ def get_revision_count(
         _df = original_df.copy()
 
         _df["timestamp_str"] = _df["timestamp"]
-        _df["timestamp"] = pd.to_datetime(_df["timestamp"], infer_datetime_format=True)
+        _df["timestamp"] = pd.to_datetime(
+            _df["timestamp"], infer_datetime_format=True
+        )
         _df["abstracted_date"] = _df["timestamp"].dt.strftime(date_granularity)
 
         edits_count_df = (
@@ -149,7 +161,9 @@ def get_revision_count(
         )
         edits_count_df.index.name = "abstracted_date"
         result_df = (
-            pd.concat([result_df, edits_count_df]).groupby(["abstracted_date"]).sum()
+            pd.concat([result_df, edits_count_df])
+            .groupby(["abstracted_date"])
+            .sum()
         )
 
     result_df.reset_index().to_csv(fname, index=False)
@@ -164,14 +178,14 @@ def batch_revisions_per_period(
     desc="monthly",
     category="Climate_change",
     corpus=None,
-    destination: str = ""
+    destination: str = "",
 ):
-
     folder_root = properties.FOLDER_WIKI_BATCHES.format(destination, desc)
-                    
+
     corpus = properties.CORPUS if corpus is None else corpus
-    wiki_titles = loader.get_wikipedia_page_titles(categories=[category],
-                                                   corpus=corpus)
+    wiki_titles = loader.get_wikipedia_page_titles(
+        categories=[category], corpus=corpus
+    )
 
     print("there are {} wiki titles".format(len(wiki_titles)))
     periords_str_lst = []
@@ -182,7 +196,9 @@ def batch_revisions_per_period(
         _df = original_df.copy()
 
         _df["timestamp_str"] = _df["timestamp"]
-        _df["timestamp"] = pd.to_datetime(_df["timestamp"], infer_datetime_format=True)
+        _df["timestamp"] = pd.to_datetime(
+            _df["timestamp"], infer_datetime_format=True
+        )
         _df["abstracted_date"] = _df["timestamp"].dt.strftime(period)
         periords_str_lst.extend(_df["abstracted_date"].unique().tolist())
         for period_val, period_df in _df.groupby("abstracted_date"):
@@ -190,7 +206,9 @@ def batch_revisions_per_period(
             utils.create_folder(f"{folder_root}/{period_val}")
             period_df.to_parquet(destination, index=False)
     periods_str_lst = list(set(periords_str_lst))
-    periods_str_lst = sorted([datetime.strptime(x, period) for x in periods_str_lst])
+    periods_str_lst = sorted(
+        [datetime.strptime(x, period) for x in periods_str_lst]
+    )
 
     return folder_root, periods_str_lst
 
@@ -227,7 +245,9 @@ def get_wikipedia_page_periodic_overview(
         _df = original_df.copy()
 
         _df["timestamp_str"] = _df["timestamp"]
-        _df["timestamp"] = pd.to_datetime(_df["timestamp"], infer_datetime_format=True)
+        _df["timestamp"] = pd.to_datetime(
+            _df["timestamp"], infer_datetime_format=True
+        )
         _df["abstracted_date"] = _df["timestamp"].dt.strftime(period)
 
         for period_val, period_df in _df.groupby("abstracted_date"):
@@ -244,7 +264,9 @@ def get_wikipedia_page_periodic_overview(
             revision_per_period["revision_count"] = len(period_df)
             revision_per_period["timestamp"] = latest_df["timestamp"].values[0]
             revision_per_period["links"] = latest_df["links"].values[0]
-            revision_per_period["categories"] = latest_df["categories"].values[0]
+            revision_per_period["categories"] = latest_df["categories"].values[
+                0
+            ]
             revision_per_period["urls"] = latest_df["urls"].values[0]
             result_arr.append(revision_per_period)
 

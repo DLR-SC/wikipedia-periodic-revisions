@@ -11,7 +11,9 @@ import textwrap
 
 
 # Helpers
-def barplot(x, y, data, xlabel="Year", ylabel="Count", hue=None, title="", dodge=True):
+def barplot(
+    x, y, data, xlabel="Year", ylabel="Count", hue=None, title="", dodge=True
+):
     sns.set(font_scale=1)
     plt.style.use("fivethirtyeight")
     palette = (
@@ -36,7 +38,9 @@ def barplot(x, y, data, xlabel="Year", ylabel="Count", hue=None, title="", dodge
     for label in axes.xaxis.get_ticklabels():
         label.set_rotation(60)
 
-    axes.yaxis.set_major_formatter(matplotlib.ticker.StrMethodFormatter("{x:,.0f}"))
+    axes.yaxis.set_major_formatter(
+        matplotlib.ticker.StrMethodFormatter("{x:,.0f}")
+    )
 
     plt.show()
 
@@ -52,7 +56,10 @@ def get_edited_page_count(
         only_popular=only_popular, period=period, desc=desc
     )
     dict_ = [
-        {"period": period, "article_count": len(set(period_df["title"].unique()))}
+        {
+            "period": period,
+            "article_count": len(set(period_df["title"].unique())),
+        }
         for period, period_df in periodic_df.groupby(["period"])
     ]
 
@@ -71,7 +78,9 @@ def get_edited_page_count(
 
     if save:
         utils.create_folder(properties.STATS_FOLDER)
-        name = "{}ly_count_edited-and-created_wikipages.csv".format(desc.lower())
+        name = "{}ly_count_edited-and-created_wikipages.csv".format(
+            desc.lower()
+        )
         result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
     return result_df
 
@@ -92,7 +101,9 @@ def get_created_page_count(
     result = []
     for period_, df_ in periodic_df.groupby("period"):
         period_articles = df_["title"].unique().tolist()
-        count_new_articles = len([x for x in period_articles if x not in articles])
+        count_new_articles = len(
+            [x for x in period_articles if x not in articles]
+        )
         articles.extend(period_articles)
         if len(articles) == 0:
             print("error")
@@ -142,7 +153,9 @@ def get_revisions_over_time(
             result_df,
             ylabel="Count of Wikipage Revisions",
             xlabel=desc.capitalize(),
-            title="{}ly Count of Wikipedia Revisions".format(desc.capitalize()),
+            title="{}ly Count of Wikipedia Revisions".format(
+                desc.capitalize()
+            ),
         )
     if save:
         utils.create_folder(properties.STATS_FOLDER)
@@ -263,7 +276,9 @@ def get_users_over_time(
             result_df,
             ylabel="Count of Unique Users",
             xlabel=desc.capitalize(),
-            title="{}ly Count of Wikipedia Page Users".format(desc.capitalize()),
+            title="{}ly Count of Wikipedia Page Users".format(
+                desc.capitalize()
+            ),
             hue="User Type",
             dodge=True,
         )
@@ -276,7 +291,11 @@ def get_users_over_time(
 
 
 def get_most_edited_articles(
-    top=3, only_popular=False, period=properties.DATE_YEAR, desc="YEAR", plot=True
+    top=3,
+    only_popular=False,
+    period=properties.DATE_YEAR,
+    desc="YEAR",
+    plot=True,
 ):
     sns.set(font_scale=1)
     plt.style.use("fivethirtyeight")
@@ -284,7 +303,9 @@ def get_most_edited_articles(
         only_popular=only_popular, period=period, desc=desc
     )
     num_period = len(periodic_df["period"].unique())
-    f, axes = plt.subplots(1, num_period, sharex=False, sharey=True, figsize=(20, 6))
+    f, axes = plt.subplots(
+        1, num_period, sharex=False, sharey=True, figsize=(20, 6)
+    )
 
     idx = 0
     for period_, df_ in periodic_df.groupby(["period"]):
@@ -331,7 +352,10 @@ def get_most_edited_articles(
 
 
 def get_periodic_most_to_least_revised(
-    only_popular=False, period=properties.DATE_YEAR, desc="YEAR", save: bool = False
+    only_popular=False,
+    period=properties.DATE_YEAR,
+    desc="YEAR",
+    save: bool = False,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
         only_popular=only_popular, period=period, desc=desc
@@ -357,7 +381,9 @@ def get_periodic_most_to_least_revised(
     result_df = pd.DataFrame(extended_dict)
     if save:
         utils.create_folder(properties.STATS_FOLDER)
-        name = "{}ly_most-to-least_revised_wikipedia_pages.csv".format(desc.lower())
+        name = "{}ly_most-to-least_revised_wikipedia_pages.csv".format(
+            desc.lower()
+        )
         result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
     return result_df
 
@@ -386,7 +412,9 @@ def get_attr_for_period_as_txt(
 
     utils.create_folder(properties.STATS_FOLDER)
     with open(
-        f"{properties.STATS_FOLDER}/{attr_val}_{period_val}.txt", "w", encoding="utf-8"
+        f"{properties.STATS_FOLDER}/{attr_val}_{period_val}.txt",
+        "w",
+        encoding="utf-8",
     ) as f:
         for line in result_arr:
             f.write(f"{line}\n")
@@ -394,7 +422,10 @@ def get_attr_for_period_as_txt(
 
 
 def get_periodic_revisions_percentage(
-    only_popular=False, period=properties.DATE_YEAR, desc="YEAR", save: bool = False
+    only_popular=False,
+    period=properties.DATE_YEAR,
+    desc="YEAR",
+    save: bool = False,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
         only_popular=only_popular, period=period, desc=desc
@@ -410,11 +441,19 @@ def get_periodic_revisions_percentage(
         3,
     )
     result_df = periodic_df[
-        ["period", "title", "revision_count", "revision_percentage", "timestamp"]
+        [
+            "period",
+            "title",
+            "revision_count",
+            "revision_percentage",
+            "timestamp",
+        ]
     ]
     if save:
         utils.create_folder(properties.STATS_FOLDER)
-        name = "{}ly_wikipedia_page_revisions_w_percentage.csv".format(desc.lower())
+        name = "{}ly_wikipedia_page_revisions_w_percentage.csv".format(
+            desc.lower()
+        )
         result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
 
     return result_df

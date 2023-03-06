@@ -4,7 +4,9 @@ from datetime import datetime
 
 from wikipedia_tools.scraper.wikirevparser_with_time import ProcessRevisions
 
-from wikipedia_tools.base.wikipedia_w_time.exceptions import DisambiguationError
+from wikipedia_tools.base.wikipedia_w_time.exceptions import (
+    DisambiguationError,
+)
 from functools import reduce
 from tqdm import tqdm
 
@@ -37,7 +39,9 @@ def process_page_revisions(
             for p in e.options:
                 print(f"Getting page {p}")
                 if p != page_name:
-                    dict_.update(process_page_revisions(p, lang, rev_from, rev_to))
+                    dict_.update(
+                        process_page_revisions(p, lang, rev_from, rev_to)
+                    )
             return dict_
 
         data = parser_instance.parse_revisions()
@@ -83,22 +87,30 @@ def get_revisions_all_pages(pages, lang, rev_from, rev_to):
 
 def _save_debug(downloaded, no_revs, error_pages, rev_from, rev_to):
     prefix = (
-        f"from{rev_from.strftime('%d-%m-%Y')}" f"_{rev_to.strftime('%d-%m-%Y')}"
+        f"from{rev_from.strftime('%d-%m-%Y')}"
+        f"_{rev_to.strftime('%d-%m-%Y')}"
         if rev_from is not None and rev_to is not None
         else ""
     )
 
     with open(
-        os.path.join(properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_downloaded.txt"),
+        os.path.join(
+            properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_downloaded.txt"
+        ),
         "w",
     ) as f:
         f.write(f"{downloaded}\n")
     with open(
-        os.path.join(properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_no_revs.txt"), "w"
+        os.path.join(
+            properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_no_revs.txt"
+        ),
+        "w",
     ) as f:
         f.write(f"{no_revs}\n")
     with open(
-        os.path.join(properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_error_pages.txt"),
+        os.path.join(
+            properties.WIKI_SCRAPER_DEBUG_FOLDER, f"{prefix}_error_pages.txt"
+        ),
         "w",
     ) as f:
         f.write(f"{error_pages}\n")

@@ -20,7 +20,9 @@ def _add_id(row):
 def extract_nrc_emotion_for_all_revisions(
     wiki_page_title, content_col="content", save=False
 ):
-    file_path = prop.FEATURE_NRC_PATH.format(utils.get_alphanumeric(wiki_page_title))
+    file_path = prop.FEATURE_NRC_PATH.format(
+        utils.get_alphanumeric(wiki_page_title)
+    )
 
     if utils.file_exists(file_path):
         return pd.read_csv(file_path, index_col="numeric_id")
@@ -31,7 +33,9 @@ def extract_nrc_emotion_for_all_revisions(
     nrc_df = contents_df[[content_col]].copy()
 
     print("calculating lexicon cound for nrc...")
-    nrc_df = lexicons.count_nrc_emotions_and_sentiments(nrc_df, text_column=content_col)
+    nrc_df = lexicons.count_nrc_emotions_and_sentiments(
+        nrc_df, text_column=content_col
+    )
 
     if save:
         nrc_df.reset_index().to_csv(file_path, index=False)
@@ -54,7 +58,9 @@ def extract_nrc_emotion(df, content_cols, file_path=None):
 
 
 def extract_empath(wiki_page_title, content_col="content", file_path=None):
-    file_path = prop.FEATURE_EMPATH_PATH.format(utils.get_alphanumeric(wiki_page_title))
+    file_path = prop.FEATURE_EMPATH_PATH.format(
+        utils.get_alphanumeric(wiki_page_title)
+    )
 
     if utils.file_exists(file_path):
         return pd.read_csv(file_path, index_col="numeric_id")

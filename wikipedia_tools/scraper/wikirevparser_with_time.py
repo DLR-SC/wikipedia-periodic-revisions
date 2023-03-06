@@ -15,7 +15,11 @@ from datetime import datetime
 
 class ProcessRevisions:
     def __init__(
-        self, language, event, rev_from: datetime = None, rev_to: datetime = None
+        self,
+        language,
+        event,
+        rev_from: datetime = None,
+        rev_to: datetime = None,
     ):
         self.language = language
         self.event = event
@@ -39,7 +43,9 @@ class ProcessRevisions:
             return page
 
         except exceptions.PageError:
-            print("An exception was thrown in ProcessRevisions in wikirevparser")
+            print(
+                "An exception was thrown in ProcessRevisions in wikirevparser"
+            )
             return None
 
     def replace_link(self, input_string, link, text):
@@ -127,7 +133,9 @@ class ProcessRevisions:
 
         image_title = "_".join([x for x in image_title.split()])
         image_link = (
-            "https://commons.wikimedia.org/wiki/File:" + image_title + image_extension
+            "https://commons.wikimedia.org/wiki/File:"
+            + image_title
+            + image_extension
         )
         return image_link
 
@@ -264,10 +272,13 @@ class ProcessRevisions:
             r"<ref(.*?)<\/ref>", self.content
         )
         citations, self.content = self.get_occurrences(
-            r"{{[c|C]ite [" + regex_letters + regex_symbols + ">]+}}", self.content
+            r"{{[c|C]ite [" + regex_letters + regex_symbols + ">]+}}",
+            self.content,
         )
 
-        urls = self.get_urls(references + citations + [x for x in self.content.split()])
+        urls = self.get_urls(
+            references + citations + [x for x in self.content.split()]
+        )
 
         reference_types = self.get_reference_types(references + citations)
         if reference_types != None:
@@ -331,7 +342,9 @@ class ProcessRevisions:
     def parse_text(self):
         # Get and remove tables and markup from content.
         clean_content = []
-        italics_markup, self.content = self.get_occurrences(r"\'{2,}", self.content)
+        italics_markup, self.content = self.get_occurrences(
+            r"\'{2,}", self.content
+        )
 
         for line in self.content.split("\n"):
             line = line.strip()

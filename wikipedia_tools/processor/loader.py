@@ -42,7 +42,9 @@ def get_wikipedia_page_data(
     def to_tuple(arr):
         return tuple(map(tuple, arr))
 
-    paths = glob(os.path.join(corpus, category, "*", f"{wikipedia_page}.parquet"))
+    paths = glob(
+        os.path.join(corpus, category, "*", f"{wikipedia_page}.parquet")
+    )
     data_df: pd.DataFrame = None
     _all_data_lst = []
     for path in paths:

@@ -171,9 +171,13 @@ def geosearch(latitude, longitude, title=None, results=10, radius=1000):
 
     search_pages = raw_results["query"].get("pages", None)
     if search_pages:
-        search_results = (v["title"] for k, v in search_pages.items() if k != "-1")
+        search_results = (
+            v["title"] for k, v in search_pages.items() if k != "-1"
+        )
     else:
-        search_results = (d["title"] for d in raw_results["query"]["geosearch"])
+        search_results = (
+            d["title"] for d in raw_results["query"]["geosearch"]
+        )
 
     return list(search_results)
 
@@ -262,7 +266,9 @@ def summary(title, sentences=0, chars=0, auto_suggest=True, redirect=True):
     return summary
 
 
-def page(title=None, pageid=None, auto_suggest=True, redirect=True, preload=False):
+def page(
+    title=None, pageid=None, auto_suggest=True, redirect=True, preload=False
+):
     """
     Get a WikipediaPage object for the page with title `title` or the pageid
     `pageid` (mutually exclusive).
@@ -395,7 +401,9 @@ class WikipediaPage:
                 assert redirects["from"] == from_title, ODD_ERROR_MESSAGE
 
                 # change the title and reload the whole object
-                self.__init__(redirects["to"], redirect=redirect, preload=preload)
+                self.__init__(
+                    redirects["to"], redirect=redirect, preload=preload
+                )
 
             else:
                 raise RedirectError(getattr(self, "title", page["title"]))
@@ -433,7 +441,9 @@ class WikipediaPage:
 
             lis = BeautifulSoup(html, "html.parser").find_all("li")
             filtered_lis = [
-                li for li in lis if not "tocsection" in "".join(li.get("class", []))
+                li
+                for li in lis
+                if not "tocsection" in "".join(li.get("class", []))
             ]
             may_refer_to = [li.a.get_text() for li in filtered_lis if li.a]
 
@@ -468,7 +478,9 @@ class WikipediaPage:
             if "generator" in query_params:
                 for (
                     datum
-                ) in pages.values():  # in python 3.3+: "yield from pages.values()"
+                ) in (
+                    pages.values()
+                ):  # in python 3.3+: "yield from pages.values()"
                     yield datum
             elif prop in pages[self.pageid].keys():
                 for datum in pages[self.pageid][prop]:
@@ -517,7 +529,9 @@ class WikipediaPage:
                     query_params["rvdir"] = "older"
 
             request = _wiki_request(query_params)
-            self._html = request["query"]["pages"][self.pageid]["revisions"][0]["*"]
+            self._html = request["query"]["pages"][self.pageid]["revisions"][
+                0
+            ]["*"]
 
         return self._html
 
@@ -539,12 +553,12 @@ class WikipediaPage:
                 query_params["pageids"] = self.pageid
             request = _wiki_request(query_params)
             self._content = request["query"]["pages"][self.pageid]["extract"]
-            self._revision_id = request["query"]["pages"][self.pageid]["revisions"][0][
-                "revid"
-            ]
-            self._parent_id = request["query"]["pages"][self.pageid]["revisions"][0][
-                "parentid"
-            ]
+            self._revision_id = request["query"]["pages"][self.pageid][
+                "revisions"
+            ][0]["revid"]
+            self._parent_id = request["query"]["pages"][self.pageid][
+                "revisions"
+            ][0]["parentid"]
 
         return self._content
 
@@ -618,10 +632,15 @@ class WikipediaPage:
             request = _wiki_request(query_params)
             if "error" in request.keys():
                 return None
-            if "revisions" not in request["query"]["pages"][self.pageid].keys():
+            if (
+                "revisions"
+                not in request["query"]["pages"][self.pageid].keys()
+            ):
                 return None
 
-            self._revisions = request["query"]["pages"][self.pageid]["revisions"]
+            self._revisions = request["query"]["pages"][self.pageid][
+                "revisions"
+            ]
             max_revisions = 40000
             num_revisions = 0
 
@@ -629,7 +648,9 @@ class WikipediaPage:
                 # print(num_revisions)
                 if "continue" in request:
                     query_params["continue"] = request["continue"]["continue"]
-                    query_params["rvcontinue"] = request["continue"]["rvcontinue"]
+                    query_params["rvcontinue"] = request["continue"][
+                        "rvcontinue"
+                    ]
 
                     request = _wiki_request(query_params)
                     self._revisions = (
@@ -701,7 +722,9 @@ class WikipediaPage:
             request = _wiki_request(query_params)
 
             try:
-                coordinates = request["query"]["pages"][self.pageid]["coordinates"]
+                coordinates = request["query"]["pages"][self.pageid][
+                    "coordinates"
+                ]
                 self._coordinates = (
                     Decimal(coordinates[0]["lat"]),
                     Decimal(coordinates[0]["lon"]),
@@ -869,7 +892,9 @@ def _wiki_request(params):
         # it hasn't been long enough since the last API call
         # so wait until we're in the clear to make the request
 
-        wait_time = (RATE_LIMIT_LAST_CALL + RATE_LIMIT_MIN_WAIT) - datetime.now()
+        wait_time = (
+            RATE_LIMIT_LAST_CALL + RATE_LIMIT_MIN_WAIT
+        ) - datetime.now()
         time.sleep(int(wait_time.total_seconds()))
 
     r = requests.get(API_URL, params=params, headers=headers)

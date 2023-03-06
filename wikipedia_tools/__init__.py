@@ -2,5 +2,5 @@
 
 __version__ = "0.17.0"
 from pkg_resources import resource_filename
-filepath = resource_filename(__name__, "data/")
 
+filepath = resource_filename(__name__, "data/")
