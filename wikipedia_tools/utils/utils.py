@@ -25,7 +25,7 @@ def is_ip(s):
     valid = True
     try:
         IP(s)
- 
+
     except:
         valid = False
     return valid
