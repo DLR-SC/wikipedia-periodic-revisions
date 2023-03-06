@@ -7,7 +7,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "wikipedia_tools"
-version = "2.1.5"
+version = "2.1.7"
 description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
 readme = "README.md"
 authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]
@@ -22,7 +22,7 @@ dependencies = ['pandas>=1.0.1',
                       'tqdm==4.43.0',
                       'dataclasses==0.6',
                       'beautifulsoup4',
-                      'requests>=2.0.0,<3.0.0'
+                      'requests>=2.0.0,<3.0.0',
                       ]
 requires-python = ">=3.7"
 
@@ -47,4 +47,16 @@ dev = [ "pip-tools"]
 Homepage = 'https://github.com/DLR-SC/wikipedia-periodic-revisions'
 #[tool.setuptools.package-data]
 #myModule = ["../data/*.csv"]
+
+[tool.setuptools]
+# ...
+# By default, include-package-data is true in pyproject.toml, so you do
+# NOT have to specify this line.
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["data"]
+
+[tool.setuptools.package-data]
+mypkg = ["*.csv"]
 

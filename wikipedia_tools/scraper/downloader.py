@@ -25,7 +25,9 @@ class WikiPagesRevision:
     category_depth: int = 3
     out_version: str = "parquet"  # or jsonl
     page_limit: int = -1
+    lang: str = "en"
     REVISIONS_FILE_POSTFIX: ClassVar = "revisions.{}"
+    
 
     # categories_str:str = ""
     def __post_init__(self):
@@ -99,7 +101,7 @@ class WikiPagesRevision:
                     continue
 
                 pages_dict = re.process_page_revisions(
-                    page, "en", self.revisions_from, self.revisions_to
+                    page, self.lang, self.revisions_from, self.revisions_to
                 )
 
                 for page_name, result in pages_dict.items():
@@ -149,7 +151,7 @@ class WikiPagesRevision:
         else:
             out_folder = self._get_filename()
             revisions_df = re.get_revisions_all_pages(
-                self.pages, "en", self.revisions_from, self.revisions_to
+                self.pages, self.lang, self.revisions_from, self.revisions_to
             )
             with open(out_folder, "w", encoding="utf-8") as f:
                 for r in revisions_df:
