@@ -44,6 +44,15 @@ def main():
         help="Flag indicating if a revision and pagelink graph should be extracted",
     )
 
+    parser.add_argument(
+        "-l",
+        "--language",
+        type=str,
+        required=False,
+        default="en",
+        help="Wikipedia language, default en.",
+    )
+
     args = parser.parse_args()
 
     if args.pages_file:
@@ -63,7 +72,7 @@ def main():
         )
     else:
         print("parsing " + str(len(pages)) + "...")
-        revisions_df = re.get_revisions_all_pages(pages, "en")
+        revisions_df = re.get_revisions_all_pages(pages, args.lang)
 
         with open(args.outfile_prefix + REVISIONS_FILE_POSTFIX, "w") as f:
             for r in revisions_df:
