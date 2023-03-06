@@ -1,4 +1,4 @@
-import importlib
+import dateutil
 import pathlib
 import os
 from IPy import IP
@@ -25,20 +25,21 @@ def is_ip(s):
     valid = True
     try:
         IP(s)
+ 
     except:
         valid = False
     return valid
 
 
-def get_last_month(decreased_month=0):
+def get_x_months_ago_date(decreased_month=0):
     now = datetime.now()
     last_month = now.replace(
-        month=(now.month - decreased_month),
         day=1,
         hour=0,
         minute=0,
         second=0,
         microsecond=0,
     )
+    last_month = dateutil.relativedelta.relativedelta(months=-decreased_month)
     print(last_month.strftime("%Y-%m-%dT%H:%M:%SZ"))
     return last_month

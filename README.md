@@ -68,11 +68,11 @@ This subpackage is responsible for downloading the wikipedia revisions from the 
 
 The code below shows how to download all the revisions of pages:
   - belonging to the *Climate_change* category.
-  - revisions between start of 8 months ago (1.1.2022) and now (29.9.2022). The *get_last_month* function returns the datetime of the beginning of 8 months ago.
+  - revisions between start of 8 months ago (1.1.2022) and now (29.9.2022). The *get_x_months_ago_date* function returns the datetime of the beginning of 8 months ago.
   
     ```python 
     from wikipedia_tools.utils import utils 
-    utils.get_last_month(8)
+    utils.get_x_months_ago_date(8)
     ```
   - if  save_each_page= True: each page is fetched and downloaded on the spot under the folder **data/periodic_wiki_batches/{*categories_names*}/from{month-year}_to{month-year}**. Otherwise, all the page revisions are fetched first and then saved into one jsonl file.
   
@@ -83,9 +83,25 @@ from datetime import datetime
 
 wikirevs= downloader.WikiPagesRevision( 
                                         categories = ["Climate_change"],
-                                        revisions_from = utils.get_last_month(8),
+                                        revisions_from = utils.get_x_months_ago_date(8),
                                         revisions_to=datetime.now(),
                                         save_each_page= True
+                                        )
+```
+
+
+For german wiki revisions, you can set the *lang* attrinute to *de* - For example, you can download the German Wikipedia page revisions for the Climate_change category, as follows:
+
+```python
+from wikipedia_tools.scraper import downloader
+from datetime import datetime
+
+wikirevs= downloader.WikiPagesRevision( 
+                                        categories = ["Climate_change"],
+                                        revisions_from = utils.get_x_months_ago_date(1),
+                                        revisions_to=datetime.now(),
+                                        save_each_page= True,
+                                        lang="de"
                                         )
 ```
 
