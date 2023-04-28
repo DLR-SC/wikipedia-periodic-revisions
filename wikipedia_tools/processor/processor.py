@@ -274,6 +274,6 @@ def get_wikipedia_page_periodic_overview(
     result_df = pd.DataFrame(result_arr)  # , index = ['period', 'title'])
     try:
         result_df.to_csv(fname, index=False)
-    except Exception e:
+    except Exception:
         print("Failed to save File")
     return result_df
