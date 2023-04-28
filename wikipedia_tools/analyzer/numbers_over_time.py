@@ -389,7 +389,7 @@ def get_periodic_most_to_least_revised(
 
 
 def get_attr_for_period_as_txt(
-    period_val,
+    period_val: int | list,
     attr_val: str = "links",
     only_popular=False,
     period=properties.DATE_YEAR,
@@ -398,27 +398,33 @@ def get_attr_for_period_as_txt(
     periodic_df = processor.get_wikipedia_page_periodic_overview(
         only_popular=only_popular, period=period, desc=desc
     )
-    periodic_df = periodic_df[periodic_df["period"] == period_val].copy()
-    periodic_df.sort_values(
-        by=["revision_count", "title"], inplace=True, ascending=False
-    )
 
-    result_arr = []
-    for _, row in periodic_df.iterrows():
-        lst_ = ast.literal_eval(row[attr_val])
-        lst_ = [x.replace(" ", "") for x in lst_]
-        if len(lst_) > 0:
-            result_arr.append(". ".join(lst_))
+    if type(period_val) == int:
+        period_val = [period_val]
+    res_dict = {}
+    for single_period in period_val:
+        periodic_df = periodic_df[periodic_df["period"] == single_period].copy()
+        periodic_df.sort_values(
+            by=["revision_count", "title"], inplace=True, ascending=False
+        )
 
-    utils.create_folder(properties.STATS_FOLDER)
-    with open(
-        f"{properties.STATS_FOLDER}/{attr_val}_{period_val}.txt",
-        "w",
-        encoding="utf-8",
-    ) as f:
-        for line in result_arr:
-            f.write(f"{line}\n")
-    return result_arr
+        result_arr = []
+        for _, row in periodic_df.iterrows():
+            lst_ = ast.literal_eval(row[attr_val])
+            lst_ = [x.replace(" ", "") for x in lst_]
+            if len(lst_) > 0:
+                result_arr.append(". ".join(lst_))
+
+        utils.create_folder(properties.STATS_FOLDER)
+        with open(
+            f"{properties.STATS_FOLDER}/{attr_val}_{single_period}.txt",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            for line in result_arr:
+                f.write(f"{line}\n")
+        res_dict[single_period] = result_arr
+    return res_dict
 
 
 def get_periodic_revisions_percentage(
