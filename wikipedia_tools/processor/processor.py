@@ -220,6 +220,7 @@ def get_wikipedia_page_periodic_overview(
     desc="YEAR",
     category="Climate_change",
 ):
+    utils.create_folder(properties.ROOT_PATH)
     fname = properties.WIKI_EDITS_PERIODIC_CSV.format(
         ("POPULAR" if only_popular else "ALL"), desc
     )
@@ -271,6 +272,8 @@ def get_wikipedia_page_periodic_overview(
             result_arr.append(revision_per_period)
 
     result_df = pd.DataFrame(result_arr)  # , index = ['period', 'title'])
-
-    result_df.to_csv(fname, index=False)
+    try:
+        result_df.to_csv(fname, index=False)
+    except Exception e:
+        print("Failed to save File")
     return result_df

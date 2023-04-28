@@ -7,7 +7,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "wikipedia_tools"
-version = "2.2.2"
+version = "2.2.4"
 description='This is a Wikipedia Tool to fetch revisions based on a period of time.'
 readme = "README.md"
 authors = [{ name = "Roxanne El Baff", email = "roxanne.elbaff@dlr.de" }]

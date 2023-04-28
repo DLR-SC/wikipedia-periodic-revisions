@@ -6,7 +6,7 @@ import ast
 
 from wikipedia_tools.processor import processor
 from wikipedia_tools.utils import properties, utils
-
+from tqdm import tqdm
 import textwrap
 
 
@@ -402,7 +402,7 @@ def get_attr_for_period_as_txt(
     if type(period_val) == int:
         period_val = [period_val]
     res_dict = {}
-    for single_period in period_val:
+    for single_period in tqdm(period_val):
         periodic_df = original_df[original_df["period"] == single_period].copy()
         periodic_df.sort_values(
             by=["revision_count", "title"], inplace=True, ascending=False
