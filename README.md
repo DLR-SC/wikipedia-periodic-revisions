@@ -100,7 +100,7 @@ from datetime import datetime
 
 wikirevs= downloader.WikiPagesRevision( 
                                         categories = ["Klimaveränderung"],
-                                        revisions_from = utils.get_x_months_ago_date(1), # beguinning of last month, you ca use datetime.now() + dateutil.relativedelta.relativedelta to customized past datetime relatively
+                                        revisions_from = utils.get_x_months_ago_date(1), # beginning of last month, you can use instead datetime.now() + dateutil.relativedelta.relativedelta() to customize past datetime relatively
                                         revisions_to=datetime.now(),
                                         save_each_page= True,
                                         lang="de"
