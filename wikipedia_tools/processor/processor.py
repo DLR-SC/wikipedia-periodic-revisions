@@ -40,7 +40,7 @@ def get_wiki_pages_overview(category="Climate_change"):
         return pd.read_csv(
             properties.WIKI_OVERVIEW_CSV,
         )
-
+    utils.create_folder(properties.OUT)
     wiki_titles = loader.get_wikipedia_page_titles(
         categories=[category], corpus=properties.CORPUS
     )
@@ -165,7 +165,7 @@ def get_revision_count(
             .groupby(["abstracted_date"])
             .sum()
         )
-
+    utils.create_folder(properties.OUT)
     result_df.reset_index().to_csv(fname, index=False)
     return result_df
 
@@ -220,7 +220,7 @@ def get_wikipedia_page_periodic_overview(
     desc="YEAR",
     category="Climate_change",
 ):
-    utils.create_folder(properties.ROOT_PATH)
+    utils.create_folder(properties.OUT)
     fname = properties.WIKI_EDITS_PERIODIC_CSV.format(
         ("POPULAR" if only_popular else "ALL"), desc
     )
@@ -232,7 +232,8 @@ def get_wikipedia_page_periodic_overview(
         categories=[category], corpus=properties.CORPUS
     )
 
-    print("there are {} wiki titles".format(len(wiki_titles)))
+    print("there are {} wiki categories".format(len(wiki_titles)))
+    print("there are {} wiki titles".format(len(wiki_titles[category])))
 
     result_arr = []
     for title_code in tqdm(wiki_titles[category]):
