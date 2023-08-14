@@ -28,21 +28,27 @@ def is_important(title):
     )
 
 
-def get_wiki_pages_overview(category="Climate_change"):
+def get_wiki_pages_overview(
+    category="Climate_change",
+    corpus=properties.CORPUS,
+    root=properties.ROOT_PATH,
+):
     """
     Processes all wikipages and generates 1 dataframe where each row represents 1 wikipage with info:
     page title, created on, last updated, initial content, latest content, edits numner, content edits count, unique users,
     is_popular (if it exists under Wikipedida Climate Change Project), is_important (if it is popular and flagged important by the wiki project)
     :return:
     """
-    path = Path(properties.WIKI_OVERVIEW_CSV)
+
+    CONSTANTS = properties._CONSTANTS_(ROOT_PATH=root, CORPUS=corpus)
+    path = Path(CONSTANTS.WIKI_OVERVIEW_CSV)
     if path.is_file():
         return pd.read_csv(
-            properties.WIKI_OVERVIEW_CSV,
+            CONSTANTS.WIKI_OVERVIEW_CSV,
         )
-    utils.create_folder(properties.OUT)
+    utils.create_folder(CONSTANTS.OUT)
     wiki_titles = loader.get_wikipedia_page_titles(
-        categories=[category], corpus=properties.CORPUS
+        categories=[category], corpus=corpus
     )
     popular_pages_df = get_wiki_popular_pages()
     wiki_page_meta_arr = []
@@ -112,7 +118,7 @@ def get_wiki_pages_overview(category="Climate_change"):
         wiki_page_meta_arr.append(wiki_page_meta)
 
     meta_df = pd.DataFrame(wiki_page_meta_arr)
-    meta_df.to_csv(properties.WIKI_OVERVIEW_CSV, index=False)
+    meta_df.to_csv(CONSTANTS.WIKI_OVERVIEW_CSV, index=False)
     return meta_df
 
 
@@ -122,8 +128,11 @@ def get_revision_count(
     date_granularity=properties.DATE_MONTHLY,
     desc="MONTH-YEAR",
     category="Climate_change",
+    corpus=properties.CORPUS,
+    root=properties.ROOT_PATH,
 ):
-    fname = properties.WIKI_EDITS_COUNT_CSV.format(
+    CONSTANTS = properties._CONSTANTS_(ROOT_PATH=root, CORPUS=corpus)
+    fname = CONSTANTS.WIKI_EDITS_COUNT_CSV.format(
         ("POPULAR" if only_popular else "ALL"), desc
     )
     path = Path(fname)
@@ -131,7 +140,7 @@ def get_revision_count(
         return pd.read_csv(fname, index_col="abstracted_date")
 
     wiki_titles = loader.get_wikipedia_page_titles(
-        categories=[category], corpus=properties.CORPUS
+        categories=[category], corpus=corpus
     )
 
     print("there are {} wiki titles".format(len(wiki_titles)))
@@ -165,7 +174,7 @@ def get_revision_count(
             .groupby(["abstracted_date"])
             .sum()
         )
-    utils.create_folder(properties.OUT)
+    utils.create_folder(CONSTANTS.OUT)
     result_df.reset_index().to_csv(fname, index=False)
     return result_df
 
@@ -177,12 +186,15 @@ def batch_revisions_per_period(
     period=properties.DATE_MONTHLY,
     desc="monthly",
     category="Climate_change",
-    corpus=None,
     destination: str = "",
+    corpus=properties.CORPUS,
+    root=properties.ROOT_PATH,
 ):
-    folder_root = properties.FOLDER_WIKI_BATCHES.format(destination, desc)
+    CONSTANTS = properties._CONSTANTS_(ROOT_PATH=root, CORPUS=corpus)
 
-    corpus = properties.CORPUS if corpus is None else corpus
+    folder_root = CONSTANTS.FOLDER_WIKI_BATCHES.format(destination, desc)
+
+    corpus = CONSTANTS.CORPUS if corpus is None else corpus
     wiki_titles = loader.get_wikipedia_page_titles(
         categories=[category], corpus=corpus
     )
@@ -219,9 +231,12 @@ def get_wikipedia_page_periodic_overview(
     period=properties.DATE_YEAR,
     desc="YEAR",
     category="Climate_change",
+    corpus=properties.CORPUS,
+    root=properties.ROOT_PATH,
 ):
-    utils.create_folder(properties.OUT)
-    fname = properties.WIKI_EDITS_PERIODIC_CSV.format(
+    CONSTANTS = properties._CONSTANTS_(ROOT_PATH=root, CORPUS=corpus)
+    utils.create_folder(CONSTANTS.OUT)
+    fname = CONSTANTS.WIKI_EDITS_PERIODIC_CSV.format(
         ("POPULAR" if only_popular else "ALL"), desc
     )
     path = Path(fname)
@@ -229,7 +244,7 @@ def get_wikipedia_page_periodic_overview(
         return pd.read_csv(fname)
 
     wiki_titles = loader.get_wikipedia_page_titles(
-        categories=[category], corpus=properties.CORPUS
+        categories=[category], corpus=corpus
     )
 
     print("there are {} wiki categories".format(len(wiki_titles)))

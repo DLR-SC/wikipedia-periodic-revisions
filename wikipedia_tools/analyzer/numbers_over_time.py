@@ -51,9 +51,15 @@ def get_edited_page_count(
     desc="YEAR",
     plot=True,
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
     dict_ = [
         {
@@ -92,9 +98,15 @@ def get_created_page_count(
     desc="YEAR",
     plot=True,
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
 
     articles = []
@@ -135,9 +147,15 @@ def get_revisions_over_time(
     desc="YEAR",
     plot=True,
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
 
     dict_ = [
@@ -170,9 +188,15 @@ def get_words_over_time(
     desc="YEAR",
     plot=True,
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
     periodic_df.sort_values(by="timestamp", inplace=True)
 
@@ -217,9 +241,15 @@ def get_users_over_time(
     desc="YEAR",
     plot=True,
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
     result_arr = []
     over_time_anonymous = []
@@ -296,11 +326,17 @@ def get_most_edited_articles(
     period=properties.DATE_YEAR,
     desc="YEAR",
     plot=True,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     sns.set(font_scale=1)
     plt.style.use("fivethirtyeight")
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
     num_period = len(periodic_df["period"].unique())
     f, axes = plt.subplots(
@@ -356,10 +392,17 @@ def get_periodic_most_to_least_revised(
     period=properties.DATE_YEAR,
     desc="YEAR",
     save: bool = False,
+    category="Climate_change",
+    corpus=properties.CORPUS,
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
+
     num_period = len(periodic_df["period"].unique())
 
     _dict = {}
@@ -394,16 +437,26 @@ def get_attr_for_period_as_txt(
     only_popular=False,
     period=properties.DATE_YEAR,
     desc="YEAR",
-) -> []:  ## could be categories or urls
-    original_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+    category="Climate_change",
+    corpus=properties.CORPUS,
+):
+    sns.set(font_scale=1)
+    plt.style.use("fivethirtyeight")
+    periodic_df = processor.get_wikipedia_page_periodic_overview(
+        only_popular=only_popular,
+        period=period,
+        desc=desc,
+        category=category,
+        corpus=corpus,
     )
 
     if type(period_val) == int:
         period_val = [period_val]
     res_dict = {}
     for single_period in tqdm(period_val):
-        periodic_df = original_df[original_df["period"] == single_period].copy()
+        periodic_df = original_df[
+            original_df["period"] == single_period
+        ].copy()
         periodic_df.sort_values(
             by=["revision_count", "title"], inplace=True, ascending=False
         )
