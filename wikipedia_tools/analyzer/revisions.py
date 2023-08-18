@@ -1,30 +1,33 @@
 import dataclasses
 
 import pandas as pd
-from wikipedia_tools import utils
+import seaborn as sns
+import matplotlib.pyplot as plt
+import ast
 
 from wikipedia_tools.processor import processor
-from wikipedia_tools.utils import properties
+from wikipedia_tools.utils import properties, utils
+from tqdm import tqdm
 
 
 @dataclasses.dataclass
 class WikipediaRevisionAnalyzer:
-    categories: list
-    revisions_from: str = "01.01.2001"
-    revisions_to: "str|None" = None
-    only_popular: bool = False
-    period: dict = properties.PERIODS._YEARLY_
-
     category: str = "Climate_change"
+    only_popular: bool = False
+    period: dict = dataclasses.field(
+        default_factory=lambda:  properties.PERIODS._YEARLY_)
     corpus: str = properties.CORPUS
+    root: str = properties.ROOT_PATH
 
     def __post_init__(self):
+        self.CONSTANTS = properties._CONSTANTS_(self.root, self.corpus)
         self.periodic_df = processor.get_wikipedia_page_periodic_overview(
             only_popular=self.only_popular,
-            period=self.period.format,
-            desc=self.period.description,
+            period=self.period["format"],
+            desc=self.period["description"],
             category=self.category,
             corpus=self.corpus,
+            root=self.root
         )
 
     def get_edited_page_count(self, plot: bool = True, save: bool = False):
@@ -44,19 +47,19 @@ class WikipediaRevisionAnalyzer:
                 "article_count",
                 unique_title_count_per_period,
                 ylabel="Count of unique Wikipages",
-                xlabel=self.period.description.capitalize(),
-                title="{}ly Count of Edited/Created Climate Change Wikipedia Pages".format(
-                    self.period.description.capitalize()
+                xlabel=self.period["description"].capitalize(),
+                title="{}ly Count of Edited/Created {} Wikipedia Pages".format(
+                    self.period["description"].capitalize(), self.category
                 ),
             )
 
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_count_edited-and-created_wikipages.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
             unique_title_count_per_period.to_csv(
-                f"{properties.STATS_FOLDER}/{name}"
+                f"{self.CONSTANTS.STATS_FOLDER}/{name}"
             )
         return unique_title_count_per_period
 
@@ -82,18 +85,18 @@ class WikipediaRevisionAnalyzer:
                 "new_article_count",
                 result_df,
                 ylabel="Count of Created Wikipages",
-                xlabel=self.period.description.capitalize(),
-                title="{}ly Count of Created Climate Change Wikipedia Pages".format(
-                    self.period.description.capitalize()
+                xlabel=self.period["description"].capitalize(),
+                title="{}ly Count of Created {} Wikipedia Pages".format(
+                    self.period["description"].capitalize(), self.category
                 ),
             )
 
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_count_created_wikipages.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
 
         return pd.DataFrame(result)
 
@@ -112,17 +115,17 @@ class WikipediaRevisionAnalyzer:
                 "revision_count",
                 result_df,
                 ylabel="Count of Wikipage Revisions",
-                xlabel=self.period.description.capitalize(),
+                xlabel=self.period["description"].capitalize(),
                 title="{}ly Count of Wikipedia Revisions".format(
-                    self.period.description.capitalize()
+                    self.period["description"].capitalize()
                 ),
             )
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_count_wikipedia_page_revisions.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
         return result_df
 
     def get_words_over_time(
@@ -157,17 +160,17 @@ class WikipediaRevisionAnalyzer:
                 "word_count",
                 result_df,
                 ylabel="Count of Total Words",
-                xlabel=self.period.description.capitalize(),
+                xlabel=self.period["description"].capitalize(),
                 title="{}ly Wikipedia Page Word Count".format(
-                    self.period.description.capitalize()
+                    self.period["description"].capitalize()
                 ),
             )
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_count_wikipedia_page_words.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
 
         return result_df
 
@@ -221,9 +224,9 @@ class WikipediaRevisionAnalyzer:
                 "count_edits",
                 result_df,
                 ylabel="Count of Revisions",
-                xlabel=self.period.description.capitalize(),
+                xlabel=self.period["description"].capitalize(),
                 title="{}ly edits count of Wikipedia Pages Per user type".format(
-                    self.period.description.capitalize()
+                    self.period["description"].capitalize()
                 ),
                 hue="User Type",
                 dodge=True,
@@ -233,23 +236,23 @@ class WikipediaRevisionAnalyzer:
                 "count_unique_users",
                 result_df,
                 ylabel="Count of Unique Users",
-                xlabel=self.period.description.capitalize(),
+                xlabel=self.period["description"].capitalize(),
                 title="{}ly Count of Wikipedia Page Users".format(
-                    self.period.description.capitalize()
+                    self.period["description"].capitalize()
                 ),
                 hue="User Type",
                 dodge=True,
             )
 
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_count_wikipedia_page_users.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
         return result_df
 
-    def get_most_edited_articles(self) -> pd.DataFrame:
+    def get_most_edited_articles(self, top: int = 5) -> pd.DataFrame:
         sns.set(font_scale=1)
         plt.style.use("fivethirtyeight")
 
@@ -296,7 +299,7 @@ class WikipediaRevisionAnalyzer:
             0.5,
             1,
             "Top {} Titles per {}".format(
-                top, self.period.description.capitalize()
+                top, self.period["description"].capitalize()
             ),
             ha="center",
             fontsize=16,
@@ -328,11 +331,11 @@ class WikipediaRevisionAnalyzer:
 
         result_df = pd.DataFrame(extended_dict)
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_most-to-least_revised_wikipedia_pages.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
         return result_df
 
     def get_attr_for_period_as_txt(
@@ -347,23 +350,23 @@ class WikipediaRevisionAnalyzer:
             period_val = [period_val]
         res_dict = {}
         for single_period in tqdm(period_val):
-            self.periodic_df = original_df[
-                original_df["period"] == single_period
+            self._df = self.periodic_df[
+                self.periodic_df["period"] == single_period
             ].copy()
-            self.periodic_df.sort_values(
+            self._df.sort_values(
                 by=["revision_count", "title"], inplace=True, ascending=False
             )
 
             result_arr = []
-            for _, row in self.periodic_df.iterrows():
+            for _, row in self._df.iterrows():
                 lst_ = ast.literal_eval(row[attr_val])
                 lst_ = [x.replace(" ", "") for x in lst_]
                 if len(lst_) > 0:
                     result_arr.append(". ".join(lst_))
 
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             with open(
-                f"{properties.STATS_FOLDER}/{attr_val}_{single_period}.txt",
+                f"{self.CONSTANTS.STATS_FOLDER}/{attr_val}_{single_period}.txt",
                 "w",
                 encoding="utf-8",
             ) as f:
@@ -400,10 +403,10 @@ class WikipediaRevisionAnalyzer:
             ]
         ]
         if save:
-            utils.create_folder(properties.STATS_FOLDER)
+            utils.create_folder(self.CONSTANTS.STATS_FOLDER)
             name = "{}ly_wikipedia_page_revisions_w_percentage.csv".format(
-                self.period.description.lower()
+                self.period["description"].lower()
             )
-            result_df.to_csv(f"{properties.STATS_FOLDER}/{name}")
+            result_df.to_csv(f"{self.CONSTANTS.STATS_FOLDER}/{name}")
 
         return result_df

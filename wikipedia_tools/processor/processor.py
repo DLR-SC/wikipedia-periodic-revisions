@@ -55,7 +55,9 @@ def get_wiki_pages_overview(
 
     print("there are {} wiki titles".format(len(wiki_titles)))
     for title_code in tqdm(wiki_titles[category]):
-        original_df = loader.get_wikipedia_page_data(title_code)
+        original_df = loader.get_wikipedia_page_data(title_code,
+                                                     category=category,
+                                                     corpus=corpus)
 
         if original_df is None:
             continue
@@ -148,7 +150,9 @@ def get_revision_count(
     result_df = pd.DataFrame()
 
     for title_code in tqdm(wiki_titles[category]):
-        original_df = loader.get_wikipedia_page_data(title_code)
+        original_df = loader.get_wikipedia_page_data(title_code,
+                                                     category=category,
+                                                     corpus=corpus)
         title = original_df["page"].values[0]
         if (
             (only_popular and not is_popular(title))
@@ -199,11 +203,15 @@ def batch_revisions_per_period(
         categories=[category], corpus=corpus
     )
 
-    print("there are {} wiki titles".format(len(wiki_titles)))
     periords_str_lst = []
+    print("there are {} wiki titles".format(len(wiki_titles[category])))
     for title_code in tqdm(wiki_titles[category]):
-        original_df = loader.get_wikipedia_page_data(title_code)
+        
+        original_df = loader.get_wikipedia_page_data(title_code,
+                                                     category=category,
+                                                     corpus=corpus)
         if (original_df is None) or len(original_df) == 0:
+            print("empty df")
             continue
         _df = original_df.copy()
 
@@ -252,12 +260,15 @@ def get_wikipedia_page_periodic_overview(
 
     result_arr = []
     for title_code in tqdm(wiki_titles[category]):
-        original_df = loader.get_wikipedia_page_data(title_code)
+        original_df = loader.get_wikipedia_page_data(title_code,
+                                                     category=category,
+                                                     corpus=corpus)
         if (
             (only_popular and not is_popular(original_df["page"].values[0]))
             or (original_df is None)
             or len(original_df) == 0
         ):
+            print("original is empty")
             continue
         _df = original_df.copy()
 

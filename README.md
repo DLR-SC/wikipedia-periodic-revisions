@@ -63,7 +63,7 @@ This packages is responsible for:
 
 It contains three main subpackages and the *utils* package which contains few helpers functions:
 
-### Scraper [[wikipedia_tools.scraper](wikipedia_tools/wikipedia_tools/scraper.py)]
+### Downlaod Wiki Article Revisions [[wikipedia_tools.scraper](wikipedia_tools/wikipedia_tools/scraper.py)]
 This subpackage is responsible for downloading the wikipedia revisions from the web.
 
 The code below shows how to download all the revisions of pages:
@@ -123,3 +123,41 @@ for page_path in glob(files):
     # process/use file ....
 
 ```
+### Overview Stats
+
+```python
+
+## Initialize the analyzer object
+
+from wikipedia_tools.analyzer.revisions import WikipediaRevisionAnalyzer
+analyzer = WikipediaRevisionAnalyzer(
+    category = category,
+    period = properties.PERIODS._YEARLY_,
+    corpus = CORPUS,
+    root = ROOT_PATH
+)
+
+# Get the yearly number of articles that were created/edit at least once 
+unique_created_updated_articles = analyzer.get_edited_page_count(plot=True, save=True)
+
+# Returned the number of created articles over time
+unique_created_articles = analyzer.get_created_page_count(plot=True, save=True)
+
+# Returns the number of revisions over time
+rev_overtime_df = analyzer.get_revisions_over_time(save=True)
+
+# Returns the number of words over time
+words_overtime_df = analyzer.get_words_over_time(save=True)
+
+# Returns the number of users over time, grouped by user type
+users_overtime_df = analyzer.get_users_over_time(save=True)
+
+# return the top n wikipedia articles over time
+top_edited = analyzer.get_most_edited_articles(top=4)
+
+# return the articles sorted from most to least edited over time
+most_to_least_revised = analyzer.get_periodic_most_to_least_revised(save=True)
+
+```
+
+You can find the full example under the examples folder.

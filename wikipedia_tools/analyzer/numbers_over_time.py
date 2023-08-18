@@ -485,9 +485,10 @@ def get_periodic_revisions_percentage(
     period=properties.DATE_YEAR,
     desc="YEAR",
     save: bool = False,
+    category="Climate_change"
 ):
     periodic_df = processor.get_wikipedia_page_periodic_overview(
-        only_popular=only_popular, period=period, desc=desc
+        only_popular=only_popular, period=period, desc=desc, category=category
     )
     periodic_df.sort_values(
         by=["period", "revision_count", "title"], inplace=True, ascending=False
