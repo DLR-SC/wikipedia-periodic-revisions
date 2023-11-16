@@ -26,6 +26,21 @@
 
 ---
 
+# CITE US
+
+```
+      @software{elbaff:2023-software,
+                  author = {El Baff, Roxanne and Hecking, Tobias},
+                  license = {MIT},
+                  month = jun,
+                  title = {{Wikipedia Revisions Downloader and Analyizer}},
+                  url = {https://github.com/DLR-SC/wikipedia-periodic-revisions},
+                  version = {2.4.1},
+                  year = {2023}
+                }
+```
+
+
 ## Dependencies and Credits
 
 #### [Wikipedia API](https://github.com/goldsmith/Wikipedia)
