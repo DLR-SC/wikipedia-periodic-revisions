@@ -33,7 +33,7 @@
                   author = {El Baff, Roxanne and Hecking, Tobias},
                   license = {MIT},
                   month = dec,
-                  title = {{Wikipedia Revisions Downloader and Analyizer}},
+                  title = {{Wikipedia Revisions Downloader and Analyzer}},
                   url = {https://github.com/DLR-SC/wikipedia-periodic-revisions},
                   version = {2.4.1},
                   year = {2022}
