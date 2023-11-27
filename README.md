@@ -29,15 +29,18 @@
 # CITE US
 
 ```
-      @software{elbaff:2022-software,
-                  author = {El Baff, Roxanne and Hecking, Tobias},
-                  license = {MIT},
-                  month = dec,
-                  title = {{Wikipedia Revisions Downloader and Analyzer}},
-                  url = {https://github.com/DLR-SC/wikipedia-periodic-revisions},
-                  version = {2.4.1},
-                  year = {2022}
-                }
+
+  @software{elbaff:2022-software,
+            author = "{El Baff, Roxanne and Hecking, Tobias}",
+            license = "{MIT}",
+            month = "dec",
+            title = "{{Wikipedia Revisions Downloader and Analyzer}}",
+            url = "{https://github.com/DLR-SC/wikipedia-periodic-revisions}",
+            version = "{2.4.1}",
+            url = "https://github.com/DLR-SC/wikipedia-periodic-revisions",
+            year = 2022
+          }
+
 ```
 
 
